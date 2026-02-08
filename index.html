@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kritika Siraswa - Smart Resume</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #1e293b;
+            /* Dark Navy Slate */
+            --accent-color: #334155;
+            --text-color: #333333;
+            --light-text: #64748b;
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --chat-bg: #ffffff;
+            --user-msg-bg: #1e293b;
+            --ai-msg-bg: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11pt;
+            /* Slightly increased for fresher layout */
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .resume-container {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 45px 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* HEADER */
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 28pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        .contact-info {
+            font-size: 10.5pt;
+            color: var(--text-color);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .contact-info span {
+            display: flex;
+            align-items: center;
+        }
+
+        .separator {
+            color: var(--light-text);
+        }
+
+        /* LAYOUT GRID */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 65% 30%;
+            gap: 5%;
+        }
+
+        /* SECTIONS */
+        h2 {
+            font-size: 13pt;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 700;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 11.5pt;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .role-meta {
+            font-size: 10.5pt;
+            color: var(--light-text);
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .job-location {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 11pt;
+        }
+
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            padding-left: 5px;
+        }
+
+        .edu-block {
+            margin-bottom: 25px;
+        }
+
+        .edu-school {
+            font-size: 11pt;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .edu-meta {
+            font-size: 10.5pt;
+            color: var(--light-text);
+            margin-top: 2px;
+        }
+
+        /* RIGHT COLUMN SPECIFICS */
+        .right-column h2 {
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+
+        .right-column section {
+            margin-bottom: 30px;
+        }
+
+        .skill-group {
+            margin-bottom: 18px;
+        }
+
+        .skill-label {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 11pt;
+            margin-bottom: 4px;
+        }
+
+        .skill-list {
+            font-size: 10.5pt;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .cert-block {
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dotted var(--primary-color);
+        }
+
+        /* -------------------------------------------------- */
+        /* AI WIDGET STYLES                                   */
+        /* -------------------------------------------------- */
+
+        .ai-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid white;
+            font-size: 24px;
+        }
+
+        .ai-fab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .ai-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: var(--chat-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            /* Hidden by default */
+            flex-direction: column;
+            z-index: 1000;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .ai-window.open {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #f8fafc;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 9pt;
+            line-height: 1.4;
+        }
+
+        .ai-message {
+            background: var(--ai-msg-bg);
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .user-message {
+            background: var(--user-msg-bg);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 8px;
+            padding: 10px 15px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .suggestion-pill {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 8pt;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--primary-color);
+        }
+
+        .suggestion-pill:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .input-area {
+            padding: 10px 15px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            outline: none;
+            font-family: inherit;
+            font-size: 9pt;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .typing-indicator {
+            font-size: 8pt;
+            color: #64748b;
+            margin-left: 5px;
+            display: none;
+        }
+
+        /* Print Button Styles */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s;
+            z-index: 999;
+        }
+
+        .print-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        /* Markdown Styles inside Chat */
+        .ai-message strong {
+            font-weight: 600;
+        }
+
+        .ai-message ul {
+            margin-left: 15px;
+            margin-bottom: 5px;
+        }
+
+        .ai-message p {
+            margin-bottom: 5px;
+        }
+
+        /* PRINT MEDIA QUERY */
+        @media print {
+            @page {
+                margin: 0;
+                size: auto;
+            }
+
+            .print-btn,
+            .ai-fab,
+            .ai-window {
+                display: none !important;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: white;
+                height: 100%;
+                width: 100%;
+            }
+
+            .resume-container {
+                box-shadow: none;
+                width: 100%;
+                min-height: auto;
+                margin: 0;
+                padding: 45px 50px;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Print Button -->
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+
+    <!-- Resume Container -->
+    <div class="resume-container" id="resumeContent">
+        <!-- HEADER -->
+        <header>
+            <h1>Kritika Siraswa</h1>
+            <div class="contact-info">
+                <span>ksiraswa9481@gmail.com</span>
+                <span class="separator">•</span>
+                <span>Natura, Block-B1, Flat-2C, 37, Chanditala Main Road, Kolkata-53</span>
+            </div>
+        </header>
+
+        <div class="content-grid">
+
+            <!-- LEFT COLUMN (Main Content) -->
+            <div class="left-column">
+
+                <!-- SUMMARY -->
+                <h2>Summary</h2>
+                <p>
+                    Motivated Computer Science enthusiast with a strong foundation in C, C++, and Java. Proficient in
+                    Data Structures & Algorithms and Object-Oriented Programming. Experienced with Linux system calls
+                    and process management. Eager to apply technical skills in software development roles and contribute
+                    to innovative projects.
+                </p>
+
+                <!-- EDUCATION (Moved to main column as fresher) -->
+                <h2>Education</h2>
+
+                <div class="edu-block">
+                    <h3>B. Tech — CSE</h3>
+                    <div class="edu-school">Institute of Technology</div>
+                    <div class="edu-meta">Kolkata | Expected 2027</div>
+                    <div class="edu-meta">Pursuing 3rd Year</div>
+                </div>
+
+                <div class="edu-block">
+                    <h3>Higher Secondary (Science)</h3>
+                    <div class="edu-school">Bidya Bharati Girls' High School</div>
+                    <div class="edu-meta">Kolkata</div>
+                </div>
+
+                <div class="edu-block">
+                    <h3>Secondary Education</h3>
+                    <div class="edu-school">Bidya Bharati Girls' High School</div>
+                    <div class="edu-meta">Kolkata</div>
+                </div>
+
+                <!-- LANGUAGES -->
+                <h2>Languages</h2>
+                <ul>
+                    <li><strong>English:</strong> Professional Working Proficiency</li>
+                    <li><strong>Hindi:</strong> Native/Bilingual</li>
+                </ul>
+
+            </div>
+
+            <!-- RIGHT COLUMN (Sidebar) -->
+            <div class="right-column">
+
+                <!-- SKILLS -->
+                <section>
+                    <h2>Skills</h2>
+                    <div class="skill-group">
+                        <span class="skill-label">Programming Languages</span>
+                        <div class="skill-list">C, C++, Java</div>
+                    </div>
+                    <div class="skill-group">
+                        <span class="skill-label">Web Technologies</span>
+                        <div class="skill-list">HTML, CSS</div>
+                    </div>
+                    <div class="skill-group">
+                        <span class="skill-label">Tools & Platforms</span>
+                        <div class="skill-list">Visual Studio Code, Git</div>
+                    </div>
+                    <div class="skill-group">
+                        <span class="skill-label">Operating Systems</span>
+                        <div class="skill-list">Linux Basics, Process Management, System Calls</div>
+                    </div>
+                    <div class="skill-group">
+                        <span class="skill-label">CS Fundamentals</span>
+                        <div class="skill-list">Data Structures & Algorithms, OOP</div>
+                    </div>
+                </section>
+
+                <!-- CERTIFICATIONS (Placeholder) -->
+                <section>
+                    <h2>Certifications</h2>
+                    <div class="cert-block">
+                        <h3>Java Programming</h3>
+                        <div class="edu-school">Certification Authority</div>
+                    </div>
+                    <div class="cert-block">
+                        <h3>Introduction to Linux</h3>
+                        <div class="edu-school">Online Course Platform</div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Floating Action Button -->
+    <div class="ai-fab" onclick="toggleChat()">
+        ✨
+    </div>
+
+    <!-- AI Chat Window -->
+    <div class="ai-window" id="aiWindow">
+        <div class="ai-header">
+            <span>Kritika's AI Assistant</span>
+            <span class="close-btn" onclick="toggleChat()">✕</span>
+        </div>
+        <div class="chat-area" id="chatArea">
+            <div class="message ai-message">
+                Hello! I'm an AI assistant. I can answer questions about Kritika's resume or help draft a cover letter.
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">AI is typing...</div>
+
+        <div class="suggestions">
+            <div class="suggestion-pill" onclick="sendSuggestion('What represent her core skills?')">Core Skills</div>
+            <div class="suggestion-pill" onclick="sendSuggestion('Write a cover letter for a Java Developer role')">✨
+                Cover Letter</div>
+            <div class="suggestion-pill" onclick="sendSuggestion('Does she know Linux?')">Linux Skills</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" class="chat-input" placeholder="Ask about Kritika..."
+                onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT FOR GEMINI INTEGRATION -->
+    <script>
+        const apiKey = ""; // Runtime injection
+        let chatHistory = [];
+
+        function toggleChat() {
+            const win = document.getElementById('aiWindow');
+            win.classList.toggle('open');
+            if (win.classList.contains('open')) {
+                const chatArea = document.getElementById('chatArea');
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('userInput').value = text;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            addMessageToUI(message, 'user');
+            inputField.value = '';
+
+            document.getElementById('typingIndicator').style.display = 'block';
+
+            const resumeText = document.getElementById('resumeContent').innerText;
+
+            const systemPrompt = `You are an AI assistant representing Kritika Siraswa. 
+            Here is her resume content: 
+            ${resumeText}
+            
+            Instructions:
+            1. Answer questions strictly based on this resume.
+            2. Be professional, concise, and polite.
+            3. If asked to write a cover letter, write a professional one using the resume details and the user's input about the role/company.
+            4. If the answer isn't in the resume, say "I don't have that information in the resume."
+            
+            User Query: ${message}`;
+
+            try {
+                const response = await callGeminiAPI(systemPrompt);
+                document.getElementById('typingIndicator').style.display = 'none';
+                addMessageToUI(response, 'ai');
+            } catch (error) {
+                console.error(error);
+                document.getElementById('typingIndicator').style.display = 'none';
+                addMessageToUI("Sorry, I'm having trouble connecting to the AI right now.", 'ai');
+            }
+        }
+
+        function addMessageToUI(text, sender) {
+            const chatArea = document.getElementById('chatArea');
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+            msgDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+
+            let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+
+            msgDiv.innerHTML = formattedText;
+            chatArea.appendChild(msgDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        async function callGeminiAPI(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            // Gemini API response structure.
+            // Safety: Check if 'candidates' exists and has elements.
+            if (data.candidates && data.candidates.length > 0 &&
+                data.candidates[0].content &&
+                data.candidates[0].content.parts &&
+                data.candidates[0].content.parts.length > 0) {
+                return data.candidates[0].content.parts[0].text;
+            } else {
+                return "I'm sorry, I couldn't generate a response.";
+            }
+        }
+    </script>
+</body>
+
+</html>

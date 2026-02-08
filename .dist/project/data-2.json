@@ -1,0 +1,16 @@
+{
+  "device": {
+    "id": "machine-007",
+    "type": "drill"
+  },
+  "timestamp": "2024-06-25T08:00:00.000Z",
+  "country": "Japan",
+  "city": "Tokyo",
+  "area": "Shibuya",
+  "factory": "FactoryA",
+  "section": "Line1",
+  "data": {
+    "status": "active",
+    "temperature": 78.5
+  }
+}

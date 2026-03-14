@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f1115;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #8a8f98;
+            --accent-primary: #4f46e5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            border-bottom: 2px solid var(--glass-border);
+            padding-bottom: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            background: rgba(255,255,255,0.02);
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            background: rgba(79, 70, 229, 0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .map-link:hover {
+            background: rgba(79, 70, 229, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>📍 Location Analytics Dashboard</h1>
+        
+        {% if records %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time (Local)</th>
+                        <th>IP / Network</th>
+                        <th>Access Device</th>
+                        <th>Coordinates</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in records %}
+                    <tr>
+                        <td style="white-space: nowrap; color: var(--text-secondary);">{{ row['timestamp'] }}</td>
+                        <td style="font-family: monospace;">{{ row['ip_address'] }}</td>
+                        <td style="font-size: 0.9rem; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ row['user_agent'] }}">
+                            {{ row['user_agent'] }}
+                        </td>
+                        <td style="font-family: monospace;">{{ row['latitude']|round(6) }}, {{ row['longitude']|round(6) }}</td>
+                        <td>
+                            <a href="https://www.google.com/maps?q={{ row['latitude'] }},{{ row['longitude'] }}" target="_blank" class="map-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Open Map
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state glass-card">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 16px; opacity: 0.5;"><path d="M10 21v-6a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v6"/><path d="M21 21v-8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 13v8"/><path d="M20.25 15A9 9 0 0 0 12 3a9 9 0 0 0-8.25 12"/></svg>
+                <h2>No data yet</h2>
+                <p>Send your link to someone and have them click "Share Location" to see data appear here.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

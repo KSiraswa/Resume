@@ -1,8 +1,0 @@
-{
-  "deviceID": "machine-007",
-  "deviceType": "drill",
-  "timestamp": 1720000000000,
-  "location": "Japan/Tokyo/Shibuya/FactoryA/Line1",
-  "operationStatus": "active",
-  "temp": 78.5
-}
